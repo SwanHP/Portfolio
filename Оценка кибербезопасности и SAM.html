@@ -23,6 +23,18 @@
   header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; flex-wrap:wrap; }
   .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--cyan); margin-bottom:10px; }
   h1 { font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0; font-weight:800; max-width:640px; }
+  .back-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .back-btn:hover { border-color: var(--cyan); }
   .section-title { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); margin:0 0 14px; }
   .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:36px; }
   .stat { background:var(--panel); padding:18px 14px; text-align:left; }
@@ -73,6 +85,7 @@
       <div class="kicker">КЕЙС 03 / ОЦЕНКА SAM + АУДИТ КИБЕРБЕЗОПАСНОСТИ</div>
       <h1>Оценка кибербезопасности и SAM</h1>
     </div>
+    <a href="index.html" class="back-btn">&larr; На главную</a>
   </header>
 
   <div class="section-title">АКТИВЫ В СКОУПЕ</div>
