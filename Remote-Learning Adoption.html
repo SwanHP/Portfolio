@@ -23,6 +23,18 @@
   header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; flex-wrap:wrap; }
   .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--cyan); margin-bottom:10px; }
   h1 { font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0; font-weight:700; max-width:640px; }
+  .back-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .back-btn:hover { border-color: var(--cyan); }
   .section-title { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); margin:0 0 14px; }
   .phasebar { display:flex; height:34px; border-radius:6px; overflow:hidden; margin-bottom:14px; }
   .phasebar .seg { border-right:2px solid var(--bg); width:20%; }
@@ -70,6 +82,7 @@
       <div class="kicker">CASE 04 / REMOTE-LEARNING ADOPTION / COVID-19</div>
       <h1>Remote-Learning Adoption on MS Teams</h1>
     </div>
+    <a href="index-en.html" class="back-btn">&larr; Main</a>
   </header>
 
   <div class="section-title">PROJECT PHASES</div>
