@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -65,16 +65,19 @@
     font-weight: 700;
     max-width: 640px;
   }
-  .result-chip {
+  .back-btn {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
-    color: var(--green);
-    border: 1px solid rgba(89,200,143,0.35);
-    background: rgba(89,200,143,0.08);
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    background: var(--panel);
     padding: 8px 14px;
     border-radius: 6px;
+    text-decoration: none;
     white-space: nowrap;
-    align-self: flex-start;
+  }
+  .back-btn:hover {
+    border-color: var(--cyan);
   }
 
   .stats {
@@ -114,29 +117,6 @@
     position: relative;
     margin-bottom: 40px;
   }
-  .track {
-    position: relative;
-    height: 3px;
-    background: var(--line);
-    border-radius: 2px;
-    margin: 0 10px 0;
-  }
-  .track .seg-risk {
-    position: absolute;
-    top: 0; bottom: 0;
-    left: 34%;
-    width: 12%;
-    background: var(--red);
-    border-radius: 2px;
-  }
-  .track .seg-recover {
-    position: absolute;
-    top: 0; bottom: 0;
-    left: 46%;
-    width: 14%;
-    background: var(--green);
-    border-radius: 2px;
-  }
   .phasebar {
     display: flex;
     height: 34px;
@@ -174,31 +154,6 @@
     display: block;
     margin-bottom: 3px;
   }
-  .points {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
-    margin-top: 18px;
-  }
-  .point {
-    border-left: 2px solid var(--line);
-    padding-left: 12px;
-    padding-top: 2px;
-  }
-  .point.risk { border-left-color: var(--red); }
-  .point.recover { border-left-color: var(--green); }
-  .point .t {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 4px;
-  }
-  .point .d {
-    font-size: 14px;
-    line-height: 1.4;
-  }
-  .point.risk .t { color: var(--red); }
-  .point.recover .t { color: var(--green); }
 
   .grid2 {
     display: grid;
@@ -219,11 +174,6 @@
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
   }
-  .constraint {
-    font-size: 17px;
-    line-height: 1.55;
-  }
-  .constraint b { color: var(--cyan); font-weight: 500; }
 
   .team {
     list-style: none;
@@ -278,7 +228,6 @@
   .tag.transfer { background: rgba(227,168,87,0.15); color: var(--amber); }
   .tag.avoid { background: rgba(89,200,143,0.15); color: var(--green); }
   .tag.accept { background: rgba(130,145,168,0.15); color: var(--muted); }
-  .risk-shift { font-size: 12px; color: var(--muted); margin-top: 10px; }
 
   .section-title {
     font-family: 'JetBrains Mono', monospace;
@@ -324,7 +273,6 @@
 
   @media (max-width: 720px) {
     .stats { grid-template-columns: repeat(2, 1fr); }
-    .points { grid-template-columns: repeat(2, 1fr); }
     .phaselegend { grid-template-columns: repeat(2, 1fr); }
     .grid2 { grid-template-columns: 1fr; }
     .decisions { grid-template-columns: 1fr; }
@@ -337,9 +285,10 @@
 
   <header class="top">
     <div>
-      <div class="kicker">CASE 01 / INFRASTRUCTURE PROGRAM / 2022</div>
+      <div class="kicker">CASE 01 / INFRASTRUCTURE PROGRAM</div>
       <h1>Data Center Migration</h1>
     </div>
+    <a href="index-en.html" class="back-btn">&larr; Main</a>
   </header>
 
   <div class="section-title">ASSETS</div>
