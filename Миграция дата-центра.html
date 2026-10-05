@@ -65,6 +65,20 @@
     font-weight: 800;
     max-width: 640px;
   }
+  .back-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .back-btn:hover {
+    border-color: var(--cyan);
+  }
 
   .stats {
     display: grid;
@@ -271,9 +285,10 @@
 
   <header class="top">
     <div>
-      <div class="kicker">КЕЙС 01 / ИНФРАСТРУКТУРНАЯ ПРОГРАММА / 2022</div>
+      <div class="kicker">КЕЙС 01 / ИНФРАСТРУКТУРНАЯ ПРОГРАММА</div>
       <h1>Миграция дата-центра</h1>
     </div>
+    <a href="index.html" class="back-btn">&larr; На главную</a>
   </header>
 
   <div class="section-title">АКТИВЫ</div>
