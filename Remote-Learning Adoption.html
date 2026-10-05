@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Remote-Learning Adoption</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1420; --panel: #131b29; --line: #253346;
+    --text: #e9edf4; --muted: #8291a8;
+    --cyan: #4fd1c5; --blue: #5b8def; --red: #e1483a; --green: #59c88f; --amber: #e3a857;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1040px; margin:0 auto; padding:40px 24px 64px; }
+  header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; flex-wrap:wrap; }
+  .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--cyan); margin-bottom:10px; }
+  h1 { font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0; font-weight:700; max-width:640px; }
+  .section-title { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); margin:0 0 14px; }
+  .phasebar { display:flex; height:34px; border-radius:6px; overflow:hidden; margin-bottom:14px; }
+  .phasebar .seg { border-right:2px solid var(--bg); width:20%; }
+  .phasebar .seg:last-child { border-right:none; }
+  .phasebar .seg:nth-child(1) { background:#2c3f5c; }
+  .phasebar .seg:nth-child(2) { background:#35507a; }
+  .phasebar .seg:nth-child(3) { background:var(--blue); }
+  .phasebar .seg:nth-child(4) { background:#3e6aa8; }
+  .phasebar .seg:nth-child(5) { background:var(--cyan); }
+  .phaselegend { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:40px; }
+  .phaselegend .p { font-size:12px; line-height:1.4; color:var(--text); border-left:2px solid var(--line); padding-left:10px; }
+  .phaselegend .p .pn { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); display:block; margin-bottom:3px; }
+  .grid2 { display:grid; grid-template-columns:1.3fr 1fr; gap:20px; margin-bottom:32px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:22px; }
+  .card h2 { font-size:14px; margin:0 0 14px; color:var(--cyan); font-family:'JetBrains Mono',monospace; font-weight:500; }
+  .team { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .team li { display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:baseline; font-size:13px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .team li:last-child { border-bottom:none; padding-bottom:0; }
+  .team .role { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:11px; white-space:nowrap; }
+  .team .scope { color:var(--text); }
+  .decisions { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+  .decisions .card p { font-size:14px; line-height:1.5; margin:0; color:var(--text); }
+  .tag { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.03em; padding:3px 8px; border-radius:4px; margin-right:6px; }
+  .tag.mitigate { background:rgba(91,141,239,0.15); color:var(--blue); }
+  .tag.transfer { background:rgba(227,168,87,0.15); color:var(--amber); }
+  .tag.exploit { background:rgba(79,209,197,0.15); color:var(--cyan); }
+  .metric-label { font-size:13px; color:var(--text); margin:0 0 4px; }
+  .metric-nda { font-size:12px; color:var(--muted); margin:0; }
+  .outcome { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--cyan); border-radius:8px; padding:20px 22px; margin-bottom:32px; font-size:15px; line-height:1.6; }
+  .outcome b { color:var(--cyan); font-weight:500; }
+  footer { border-top:1px solid var(--line); padding-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  @media (max-width:720px) {
+    .phaselegend { grid-template-columns:1fr 1fr; }
+    .grid2 { grid-template-columns:1fr; }
+    .decisions { grid-template-columns:1fr; }
+    header.top { flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="kicker">CASE 04 / REMOTE-LEARNING ADOPTION / COVID-19</div>
+      <h1>Remote-Learning Adoption on MS Teams</h1>
+    </div>
+  </header>
+
+  <div class="section-title">PROJECT PHASES</div>
+  <div class="phasebar">
+    <div class="seg" style="width:11.76%"></div>
+    <div class="seg" style="width:20.59%"></div>
+    <div class="seg" style="width:8.82%"></div>
+    <div class="seg" style="width:29.41%"></div>
+    <div class="seg" style="width:29.41%"></div>
+  </div>
+  <div class="phaselegend">
+    <div class="p"><span class="pn">PHASE 1</span>Gather preliminary requirements from the client</div>
+    <div class="p"><span class="pn">PHASE 2</span>Prepare a demo</div>
+    <div class="p"><span class="pn">PHASE 3</span>Collect feedback</div>
+    <div class="p"><span class="pn">PHASE 4</span>Build the MVP</div>
+    <div class="p"><span class="pn">PHASE 5</span>Integration and IT department training</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>ASSUMPTIONS &amp; CONSTRAINTS</h2>
+      <ul class="team">
+        <li><span class="role">A1</span><span class="scope">Tool had to hold a high load, roughly 800&ndash;1,500 concurrent users with video streaming enabled.</span></li>
+        <li><span class="role">A2</span><span class="scope">Needed enough diversification to support many simultaneous classrooms, and retain context and learning materials after disconnect.</span></li>
+        <li><span class="role">A3</span><span class="scope">Had to be simple to pick up. Institutions had no time to train teaching staff.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>TEAM (1)</h2>
+      <ul class="team">
+        <li><span class="role">PM</span><span class="scope">Industry-solution specialization and no-code MS knowledge, enough to run and close the project without an additional team.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">RISK &amp; OPPORTUNITY REGISTER</div>
+  <div class="decisions">
+    <div class="card">
+      <span class="tag transfer">TRANSFER</span>
+      <p style="margin-top:10px">Near-perfect fit to client requirements, but Teams is a complex tool to learn from zero. Response: roll out functionality gradually and hand off training responsibility to the institution&rsquo;s IT department.</p>
+    </div>
+    <div class="card">
+      <span class="tag mitigate">MITIGATE</span>
+      <p style="margin-top:10px">Tool required further development. Response: build it out with Power Automate and Teams&rsquo; own customization capabilities.</p>
+    </div>
+    <div class="card">
+      <span class="tag exploit">EXPLOIT</span>
+      <p style="margin-top:10px">Near-perfect fit to requirements already present in MS Teams itself. Response: build an MVP to maximize the demonstration of the tool&rsquo;s strengths.</p>
+    </div>
+  </div>
+
+  <div class="section-title">METRICS TRACKED</div>
+  <div class="decisions" style="grid-template-columns:1fr">
+    <div class="card">
+      <p class="metric-label">EVM</p>
+      <p class="metric-nda">Standard earned value metrics for schedule and cost performance.</p>
+    </div>
+  </div>
+
+  <div class="outcome">
+    <b>Outcome.</b> Project success became the reference model and pushed the integrator company to roll it out across all regions of the country.
+  </div>
+
+  <footer>
+    <span>Client name and full documentation withheld under NDA. Structure shown is representative.</span>
+    <span>Evgeniy Ivanitskiy, Enterprise Delivery Manager, Program Lead</span>
+  </footer>
+
+</div>
+</body>
+</html>

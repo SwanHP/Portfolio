@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Infrastructure Audit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1420; --panel: #131b29; --line: #253346;
+    --text: #e9edf4; --muted: #8291a8;
+    --cyan: #4fd1c5; --blue: #5b8def; --red: #e1483a; --green: #59c88f; --amber: #e3a857;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1040px; margin:0 auto; padding:40px 24px 64px; }
+  header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; flex-wrap:wrap; }
+  .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--cyan); margin-bottom:10px; }
+  h1 { font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0; font-weight:700; max-width:640px; }
+  .section-title { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); margin:0 0 14px; }
+  .nda-note { background:var(--panel); border:1px dashed var(--line); border-radius:8px; padding:16px 18px; font-size:13px; color:var(--muted); margin-bottom:36px; }
+  .phasebar { display:flex; height:34px; border-radius:6px; overflow:hidden; margin-bottom:14px; }
+  .phasebar .seg { border-right:2px solid var(--bg); width:33.33%; }
+  .phasebar .seg:last-child { border-right:none; }
+  .phasebar .seg:nth-child(1) { background:#2c3f5c; }
+  .phasebar .seg:nth-child(2) { background:var(--blue); }
+  .phasebar .seg:nth-child(3) { background:var(--cyan); }
+  .phaselegend { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:40px; }
+  .phaselegend .p { font-size:12px; line-height:1.4; color:var(--text); border-left:2px solid var(--line); padding-left:10px; }
+  .phaselegend .p .pn { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); display:block; margin-bottom:3px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:32px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:22px; }
+  .card h2 { font-size:14px; margin:0 0 14px; color:var(--cyan); font-family:'JetBrains Mono',monospace; font-weight:500; }
+  .team { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .team li { display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:baseline; font-size:13px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .team li:last-child { border-bottom:none; padding-bottom:0; }
+  .team .role { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:11px; white-space:nowrap; }
+  .team .scope { color:var(--text); }
+  .decisions { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-bottom:32px; }
+  .decisions.metrics4 { grid-template-columns:repeat(4,1fr); }
+  .decisions .card p { font-size:14px; line-height:1.5; margin:0; color:var(--text); }
+  .tag { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.03em; padding:3px 8px; border-radius:4px; margin-right:6px; }
+  .tag.mitigate { background:rgba(91,141,239,0.15); color:var(--blue); }
+  .metric-label { font-size:13px; color:var(--text); margin:0 0 4px; }
+  .metric-nda { font-size:12px; color:var(--muted); margin:0; }
+  .outcome { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--cyan); border-radius:8px; padding:20px 22px; margin-bottom:32px; font-size:15px; line-height:1.6; }
+  .outcome b { color:var(--cyan); font-weight:500; }
+  footer { border-top:1px solid var(--line); padding-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  @media (max-width:720px) {
+    .phaselegend { grid-template-columns:1fr; }
+    .grid2 { grid-template-columns:1fr; }
+    .decisions { grid-template-columns:1fr; }
+    .decisions.metrics4 { grid-template-columns:1fr 1fr; }
+    header.top { flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="kicker">CASE 02 / SAM AUDIT PROGRAM</div>
+      <h1>Infrastructure Audit</h1>
+    </div>
+  </header>
+
+  <div class="section-title">ASSETS</div>
+  <div class="nda-note">All in-scope assets, entities and license counts are withheld under NDA.</div>
+
+  <div class="section-title">PROJECT PHASES</div>
+  <div class="phasebar">
+    <div class="seg"></div>
+    <div class="seg"></div>
+    <div class="seg"></div>
+  </div>
+  <div class="phaselegend">
+    <div class="p"><span class="pn">PHASE 1</span>License audit</div>
+    <div class="p"><span class="pn">PHASE 2</span>Business process audit</div>
+    <div class="p"><span class="pn">PHASE 3</span>Client advisory on findings</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>ASSUMPTIONS &amp; CONSTRAINTS</h2>
+      <ul class="team">
+        <li><span class="role">A1</span><span class="scope">Highly closed client structure. Access to systems was hard to obtain.</span></li>
+        <li><span class="role">A2</span><span class="scope">No clarity at kickoff on how many affiliates sat inside the scope.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>TEAM (4)</h2>
+      <ul class="team">
+        <li><span class="role">BA</span><span class="scope">Licensing consulting.</span></li>
+        <li><span class="role">BDM</span><span class="scope">Business strategy analysis.</span></li>
+        <li><span class="role">ENG (MS)</span><span class="scope">MCSE, DBA, O365, Azure.</span></li>
+        <li><span class="role">PM</span><span class="scope">Program lead.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">RISK REGISTER, KEY ITEM</div>
+  <div class="decisions">
+    <div class="card">
+      <span class="tag mitigate">MITIGATE</span>
+      <p style="margin-top:10px">Incomplete client transparency on the full infrastructure and affiliate footprint. Response: cross-check disclosed data against other sources and verify it indirectly. Risk did not materialize.</p>
+    </div>
+  </div>
+
+  <div class="section-title">METRICS TRACKED</div>
+  <div class="decisions metrics4">
+    <div class="card">
+      <p class="metric-label">EVM</p>
+      <p class="metric-nda">Standard earned value metrics for schedule and cost performance.</p>
+    </div>
+    <div class="card">
+      <p class="metric-label">Risk management metrics</p>
+      <p class="metric-nda">Withheld under NDA.</p>
+    </div>
+    <div class="card">
+      <p class="metric-label">On-premise vs subscription metrics</p>
+      <p class="metric-nda">Custom-built for this case to compare cost efficiency of the two models.</p>
+    </div>
+    <div class="card">
+      <p class="metric-label">Microsoft license compliance metrics</p>
+      <p class="metric-nda">Tracked license purity against actual usage.</p>
+    </div>
+  </div>
+
+  <div class="outcome">
+    <b>Outcome.</b> The audit found significant over-licensing, cutting the client's next annual contract by roughly 20%. A deep business-process audit, combined with trust built with the CIO, expanded the engagement into an integration project and an upsell above $10M.
+  </div>
+
+  <footer>
+    <span>Client name, entity count and license figures withheld under NDA. Structure shown is representative.</span>
+    <span>Evgeniy Ivanitskiy, Enterprise Delivery Manager, Program Lead</span>
+  </footer>
+
+</div>
+</body>
+</html>

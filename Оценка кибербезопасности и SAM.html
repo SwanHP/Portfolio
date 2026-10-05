@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Оценка кибербезопасности и SAM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1420; --panel: #131b29; --line: #253346;
+    --text: #e9edf4; --muted: #8291a8;
+    --cyan: #4fd1c5; --blue: #5b8def; --red: #e1483a; --green: #59c88f; --amber: #e3a857;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:1040px; margin:0 auto; padding:40px 24px 64px; }
+  header.top { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; border-bottom:1px solid var(--line); padding-bottom:20px; margin-bottom:28px; flex-wrap:wrap; }
+  .kicker { font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:0.02em; color:var(--cyan); margin-bottom:10px; }
+  h1 { font-size:clamp(26px,4vw,38px); line-height:1.15; margin:0; font-weight:800; max-width:640px; }
+  .section-title { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); margin:0 0 14px; }
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin-bottom:36px; }
+  .stat { background:var(--panel); padding:18px 14px; text-align:left; }
+  .stat .n { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--text); }
+  .stat .l { font-size:12px; color:var(--muted); margin-top:4px; }
+  .phasebar { display:flex; height:34px; border-radius:6px; overflow:hidden; margin-bottom:14px; }
+  .phasebar .seg { border-right:2px solid var(--bg); }
+  .phasebar .seg:last-child { border-right:none; }
+  .phasebar .seg:nth-child(1) { background:#2c3f5c; }
+  .phasebar .seg:nth-child(2) { background:#35507a; }
+  .phasebar .seg:nth-child(3) { background:var(--blue); }
+  .phasebar .seg:nth-child(4) { background:#3e6aa8; }
+  .phasebar .seg:nth-child(5) { background:var(--cyan); }
+  .phaselegend { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:40px; }
+  .phaselegend .p { font-size:12px; line-height:1.4; color:var(--text); border-left:2px solid var(--line); padding-left:10px; }
+  .phaselegend .p .pn { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); display:block; margin-bottom:3px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:32px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:22px; }
+  .card h2 { font-size:14px; margin:0 0 14px; color:var(--cyan); font-family:'JetBrains Mono',monospace; font-weight:500; }
+  .team { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .team li { display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:baseline; font-size:13px; border-bottom:1px solid var(--line); padding-bottom:10px; }
+  .team li:last-child { border-bottom:none; padding-bottom:0; }
+  .team .role { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:11px; white-space:nowrap; }
+  .team .scope { color:var(--text); }
+  .decisions { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+  .decisions.metrics3 { grid-template-columns:repeat(3,1fr); }
+  .decisions .card p { font-size:14px; line-height:1.5; margin:0; color:var(--text); }
+  .decisions .card .num { font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:12px; margin-bottom:8px; }
+  .metric-label { font-size:13px; color:var(--text); margin:0 0 4px; }
+  .metric-nda { font-size:12px; color:var(--muted); margin:0; }
+  .outcome { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--cyan); border-radius:8px; padding:20px 22px; margin-bottom:32px; font-size:15px; line-height:1.6; }
+  .outcome b { color:var(--cyan); font-weight:700; }
+  footer { border-top:1px solid var(--line); padding-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; }
+  @media (max-width:720px) {
+    .stats { grid-template-columns:repeat(2,1fr); }
+    .phaselegend { grid-template-columns:repeat(2,1fr); }
+    .grid2 { grid-template-columns:1fr; }
+    .decisions { grid-template-columns:1fr; }
+    header.top { flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="kicker">КЕЙС 03 / ОЦЕНКА SAM + АУДИТ КИБЕРБЕЗОПАСНОСТИ</div>
+      <h1>Оценка кибербезопасности и SAM</h1>
+    </div>
+  </header>
+
+  <div class="section-title">АКТИВЫ В СКОУПЕ</div>
+  <div class="stats">
+    <div class="stat"><div class="n">131</div><div class="l">рабочих станций Windows</div></div>
+    <div class="stat"><div class="n">5</div><div class="l">физических серверов</div></div>
+    <div class="stat"><div class="n">18</div><div class="l">виртуальных серверов</div></div>
+  </div>
+
+  <div class="section-title">ФАЗЫ ПРОЕКТА</div>
+  <div class="phasebar">
+    <div class="seg" style="width:15%"></div>
+    <div class="seg" style="width:20%"></div>
+    <div class="seg" style="width:30%"></div>
+    <div class="seg" style="width:20%"></div>
+    <div class="seg" style="width:15%"></div>
+  </div>
+  <div class="phaselegend">
+    <div class="p"><span class="pn">ФАЗА 1</span>Интервьюирование заказчика</div>
+    <div class="p"><span class="pn">ФАЗА 2</span>Автоматизированная инвентаризация ПО и оборудования</div>
+    <div class="p"><span class="pn">ФАЗА 3</span>Сканирование уязвимостей и оценка кибербезопасности</div>
+    <div class="p"><span class="pn">ФАЗА 4</span>Лицензионный анализ по юрлицам</div>
+    <div class="p"><span class="pn">ФАЗА 5</span>Отчет и рекомендации</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>МЕТОДОЛОГИЯ</h2>
+      <ul class="team">
+        <li><span class="role">ФРЕЙМВОРК</span><span class="scope">CIS Critical Security Controls v7.1, 20 компетенций, оценка по группам внедрения (IG 0&ndash;3) на трех уровнях зрелости: Basic, Foundation, Organizational.</span></li>
+        <li><span class="role">ИНСТРУМЕНТЫ</span><span class="scope">Платформа автоматизированной инвентаризации, сканеры уязвимостей, скрипты анализа AD и политик, плюс структурированные интервью с заказчиком.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>КОМАНДА (3)</h2>
+      <ul class="team">
+        <li><span class="role">PM</span><span class="scope">Руководитель проекта, координация с клиентом и вендором.</span></li>
+        <li><span class="role">SAM LEAD</span><span class="scope">Методология лицензирования и расчет соответствия.</span></li>
+        <li><span class="role">ТЕХ. СПЕЦИАЛИСТ</span><span class="scope">Инструменты инвентаризации и сканирование уязвимостей.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">КЛЮЧЕВЫЕ НАХОДКИ</div>
+  <div class="decisions">
+    <div class="card">
+      <div class="num">ТЕХНИЧЕСКИЕ / КИБЕРБЕЗОПАСНОСТЬ</div>
+      <p>Устаревшее, уже не поддерживаемое вендором ПО в продуктиве, необновленные браузеры, использование ресурсов одних юрлиц другими без формальной аффилиации, отсутствие контроля за установками ПО на пользовательских машинах.</p>
+    </div>
+    <div class="card">
+      <div class="num">ОРГАНИЗАЦИОННЫЕ</div>
+      <p>Нет формализованного процесса закупки и учета ПО, нет контроля установок и разграничения прав доступа, закупки не привязаны к юрлицу, фактически использующему ПО.</p>
+    </div>
+    <div class="card">
+      <div class="num">ЛИЦЕНЗИОННЫЕ</div>
+      <p>Одновременно нехватка лицензий в одних юрлицах и неиспользуемый избыток в других, плюс нарушения правил использования по всему лицензионному портфелю.</p>
+    </div>
+  </div>
+
+  <div class="section-title">ОТСЛЕЖИВАЕМЫЕ МЕТРИКИ</div>
+  <div class="decisions metrics3">
+    <div class="card">
+      <p class="metric-label">Оценка по CIS IG</p>
+      <p class="metric-nda">Уровень группы внедрения (0&ndash;3) по каждой из 20 компетенций.</p>
+    </div>
+    <div class="card">
+      <p class="metric-label">Уровень лицензионного соответствия</p>
+      <p class="metric-nda">Приобретенные лицензии против требуемых, по категории ПО и по юрлицу.</p>
+    </div>
+    <div class="card">
+      <p class="metric-label">Сравнение TCO за 5 лет</p>
+      <p class="metric-nda">Локальное лицензирование против облачной подписки, по категориям.</p>
+    </div>
+  </div>
+
+  <div class="outcome">
+    <b>Итог.</b> Оценка по 20 компетенциям CIS показала самую слабую зрелость в реагировании на инциденты и безопасности цепочки поставки ПО. Лицензионный анализ выявил одновременную нехватку и неиспользуемый избыток лицензий в разных юрлицах заказчика. Модель TCO за 5 лет показала потенциальное сокращение расходов на лицензии примерно на 40% при переходе основных офисных и инфраструктурных нагрузок на облачную подписку.
+  </div>
+
+  <footer>
+    <span>Название клиента, стоимость контракта и полные находки не раскрываются по NDA. Структура показана условно.</span>
+    <span>Евгений Иваницкий, Enterprise Delivery Manager, Program Lead</span>
+  </footer>
+
+</div>
+</body>
+</html>
